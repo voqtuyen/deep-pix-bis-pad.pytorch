@@ -1,0 +1,21 @@
+dataset:
+  name: 'nuua'
+  root: 'data/nuua'
+  augmentation:
+    horizontal_flip: True
+    vertial_flip: False
+    random_rotation: 30
+  train_set: 'train'
+  test_set: 'test'
+
+model:
+  base: 'mobilenet_v2_1.0_224'
+  num_output: 2
+  image_size: (224,224)
+
+train:
+  batch_size: 32
+  optimizer: 'adam'
+  lr: 0.001
+  num_epochs: 100
+
