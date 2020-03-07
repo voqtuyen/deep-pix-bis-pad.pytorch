@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import Dataset
 import pandas as pd
 import numpy as np
-from skimage import io
+from PIL import Image
 from torchvision import transforms
 
 
@@ -32,9 +32,17 @@ class PixWiseDataset(Dataset):
 
 
     def __getitem__(self, index):
+        """ Get image, output map and label for a given index
+        Args:
+            index (int): index of image
+        Returns:
+            img (PIL Image): 
+            mask: output map (14x14)
+            label: 1 (genuine), 0 (fake) 
+        """
         img_name = self.data.iloc[index, 0]
         img_name = os.path.join(self.root_dir, img_name)
-        img = io.imread(img_name)
+        img = Image.open(img_name)
 
         label = self.data.iloc[index, 1]
 
@@ -46,7 +54,7 @@ class PixWiseDataset(Dataset):
         if self.transform:
             img = self.transform(img)
 
-        return img, label, mask
+        return img, mask, label
 
 
     def __len__(self):
