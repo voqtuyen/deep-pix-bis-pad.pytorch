@@ -9,13 +9,18 @@ dataset:
   test_set: 'test'
 
 model:
-  base: 'mobilenet_v2_1.0_224'
+  base: 'densenet_161'
+  pretrained: True
   num_output: 2
   image_size: (224,224)
+  map_size: 14
+  smoothing: True
 
 train:
   batch_size: 32
   optimizer: 'adam'
   lr: 0.001
   num_epochs: 100
+  loss:
+    beta: 0.5
 
