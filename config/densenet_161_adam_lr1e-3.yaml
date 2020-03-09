@@ -27,3 +27,6 @@ train:
   loss:
     beta: 0.5
 
+test:
+  batch_size: 32
+  score_type: 'pixel' # types = (pixel, binary, combined)

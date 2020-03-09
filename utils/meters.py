@@ -24,3 +24,13 @@ class AverageMeter():
 
 
 # https://gitlab.idiap.ch/bob/bob.paper.deep_pix_bis_pad.icb2019/blob/master/bob/paper/deep_pix_bis_pad/icb2019/extractor/DeepPixBiS.py
+def calc_acc(mask, label, score_type='pixel'):
+    if score_type == 'pixel':
+        return
+    elif score_type == 'binary':
+        return 
+    elif score_type == 'combined':
+        return
+    else:
+        raise NotImplementedError
+    
