@@ -18,6 +18,10 @@ class BaseTrainer():
         raise NotImplementedError
 
 
+    def train_one_epoch(self):
+        raise NotImplementedError
+
+
     def train(self):
         raise NotImplementedError
 

@@ -1,6 +1,7 @@
 import os
 import torch
 from trainer.base import BaseTrainer
+from utils.meters import AverageMeter
 
 
 class Trainer(BaseTrainer):
@@ -29,18 +30,35 @@ class Trainer(BaseTrainer):
         torch.save(state, saved_name)
 
 
+    def train_one_epoch(self, epoch):
+
+        loss_metric = AverageMeter()
+        acc_metric = AverageMeter()
+
+        for i, (img, mask, label) in enumerate(self.trainloader):
+            img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
+            net_mask, net_label = self.network(img)
+            self.optimizer.zero_grad()
+            loss = self.loss(net_mask, net_label, mask, label)
+            loss.backward()
+            self.optimizer.step()
+
+            # Update metrics
+            loss_metric.update(loss)
+            acc_metric.update()
+
+
     def train(self):
         self.network.train()
 
         for epoch in range(self.cfg['train']['num_epochs']):
-            for i, (img, mask, label) in enumerate(self.trainloader):
-                img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
-                net_mask, net_label = self.network(img)
-                self.optimizer.zero_grad()
-                loss = self.loss(net_mask, net_label, mask, label)
-                loss.backward()
-                self.optimizer.step()
+            self.train_one_epoch(epoch)
+            self.validate()
 
 
     def validate(self):
-        return
+        self.network.eval()
+
+        for i, (img, mask, label) in enumerate(self.testloader):
+            img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
+            net_mask, net_label = self.network(img)
