@@ -48,6 +48,7 @@ def get_device(cfg):
         device = torch.device("cuda")
     else:
         raise NotImplementedError
+    return device
 
 
 def build_network(cfg):

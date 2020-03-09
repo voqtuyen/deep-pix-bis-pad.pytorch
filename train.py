@@ -16,11 +16,21 @@ optimizer = get_optimizer(cfg, network)
 
 loss = PixWiseBCELoss(beta=cfg['train']['loss']['beta'])
 
+train_transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+])
+
+test_transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+])
+
 trainset = PixWiseDataset(
     root_dir=cfg['dataset']['root'],
     csv_file='',
     map_size=cfg['model']['map_size'],
-    transform=None,
+    transform=train_transform,
     smoothing=cfg['model']['smoothing']
 )
 
@@ -28,8 +38,8 @@ testset = PixWiseDataset(
     root_dir=cfg['dataset']['root'],
     csv_file='',
     map_size=cfg['model']['map_size'],
-    transform=None,
-    smoothing=True
+    transform=test_transform,
+    smoothing=cfg['model']['smoothing']
 )
 
 trainloader = torch.utils.data.DataLoader(
@@ -52,6 +62,7 @@ trainer = Trainer(
     optimizer=optimizer,
     loss=loss,
     lr_scheduler=None,
+    device=device,
     trainloader=trainloader,
     testloader=testloader
 )
