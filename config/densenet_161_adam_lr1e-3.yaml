@@ -20,7 +20,7 @@ model:
   smoothing: True
 
 train:
-  batch_size: 32
+  batch_size: 2
   optimizer: 'adam'
   lr: 0.001
   num_epochs: 100
@@ -28,5 +28,5 @@ train:
     beta: 0.5
 
 test:
-  batch_size: 32
+  batch_size: 2
   score_type: 'pixel' # types = (pixel, binary, combined)
