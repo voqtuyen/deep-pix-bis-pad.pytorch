@@ -2,14 +2,14 @@ output_dir: 'experiments/output'
 log_dir: 'experiments/log'
 device: 'cpu'
 dataset:
-  name: 'nuua'
-  root: 'data/nuua'
+  name: 'nuaa'
+  root: 'data/nuaa'
   augmentation:
     horizontal_flip: True
     vertial_flip: False
     random_rotation: 30
-  train_set: 'train'
-  test_set: 'test'
+  train_set: 'train.csv'
+  test_set: 'test.csv'
 
 model:
   base: 'densenet_161'

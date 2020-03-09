@@ -21,7 +21,7 @@ class PixWiseDataset(Dataset):
     def __init__(self, root_dir, csv_file, map_size, transform=None, smoothing=True):
         super().__init__()
         self.root_dir = root_dir
-        self.data = pd.read_csv(csv_file)
+        self.data = pd.read_csv(os.path.join(root_dir, csv_file))
         self.map_size = map_size
         self.transform = transform
         

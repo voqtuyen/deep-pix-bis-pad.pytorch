@@ -44,8 +44,9 @@ class Trainer(BaseTrainer):
             self.optimizer.step()
 
             # Update metrics
+            print(loss)
             loss_metric.update(loss)
-            acc_metric.update()
+            # acc_metric.update()
 
 
     def train(self):
@@ -53,7 +54,7 @@ class Trainer(BaseTrainer):
 
         for epoch in range(self.cfg['train']['num_epochs']):
             self.train_one_epoch(epoch)
-            self.validate()
+            # self.validate()
 
 
     def validate(self):

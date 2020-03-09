@@ -27,7 +27,7 @@ def get_optimizer(cfg, network):
     """
     optimizer = None
     if cfg['train']['optimizer'] == 'adam':
-        optimizer = optim.Adam(network.paramters(), lr=cfg['train']['lr'])
+        optimizer = optim.Adam(network.parameters(), lr=cfg['train']['lr'])
     else:
         raise NotImplementedError
 
@@ -60,7 +60,7 @@ def build_network(cfg):
     """
     network = None
 
-    if cfg['model']['name'] == 'densenet_161':
+    if cfg['model']['base'] == 'densenet_161':
         network = DeepPixBis(pretrained=cfg['model']['pretrained'])
     else:
         raise NotImplementedError

@@ -16,19 +16,22 @@ optimizer = get_optimizer(cfg, network)
 
 loss = PixWiseBCELoss(beta=cfg['train']['loss']['beta'])
 
+# Without Resize transform, images are of different sizes and it causes an error
 train_transform = transforms.Compose([
+    transforms.Resize((224,224)),
     transforms.ToTensor(),
     transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
 ])
 
 test_transform = transforms.Compose([
+    transforms.Resize((224,224)),
     transforms.ToTensor(),
     transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
 ])
 
 trainset = PixWiseDataset(
     root_dir=cfg['dataset']['root'],
-    csv_file='',
+    csv_file=cfg['dataset']['train_set'],
     map_size=cfg['model']['map_size'],
     transform=train_transform,
     smoothing=cfg['model']['smoothing']
@@ -36,7 +39,7 @@ trainset = PixWiseDataset(
 
 testset = PixWiseDataset(
     root_dir=cfg['dataset']['root'],
-    csv_file='',
+    csv_file=cfg['dataset']['test_set'],
     map_size=cfg['model']['map_size'],
     transform=test_transform,
     smoothing=cfg['model']['smoothing']
@@ -46,14 +49,14 @@ trainloader = torch.utils.data.DataLoader(
     dataset=trainset,
     batch_size=cfg['train']['batch_size'],
     shuffle=True,
-    num_workers=2
+    num_workers=0
 )
 
 testloader = torch.utils.data.DataLoader(
     dataset=testset,
-    batch_size=cfg['train']['batch_size'],
+    batch_size=cfg['test']['batch_size'],
     shuffle=False,
-    num_workers=2
+    num_workers=0
 )
 
 trainer = Trainer(
