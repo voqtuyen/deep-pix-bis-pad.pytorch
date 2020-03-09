@@ -44,16 +44,13 @@ class PixWiseDataset(Dataset):
         img_name = os.path.join(self.root_dir, img_name)
         img = Image.open(img_name)
 
-        label = self.data.iloc[index, 1]
+        label = self.data.iloc[index, 1].astype(np.float32)
         label = np.expand_dims(label, axis=0)
 
         if label == 1:
-            mask = np.ones((1, self.map_size, self.map_size), dtype=np.float) * self.label_weight
+            mask = np.ones((1, self.map_size, self.map_size), dtype=np.float32) * self.label_weight
         else:
-            mask = np.ones((1, self.map_size, self.map_size), dtype=np.float) * (1.0 - self.label_weight)
-
-        mask = torch.from_numpy(mask).type(torch.FloatTensor)
-        label = torch.from_numpy(label).type(torch.FloatTensor)
+            mask = np.ones((1, self.map_size, self.map_size), dtype=np.float32) * (1.0 - self.label_weight)
 
         if self.transform:
             img = self.transform(img)
