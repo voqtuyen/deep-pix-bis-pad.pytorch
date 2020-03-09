@@ -1,4 +1,5 @@
 import yaml
+import torch
 from torch import optim
 from models.densenet_161 import DeepPixBis
 
@@ -31,6 +32,22 @@ def get_optimizer(cfg, network):
         raise NotImplementedError
 
     return optimizer
+
+
+def get_device(cfg):
+    """ Get device based on configuration
+    Args: 
+        cfg (dict): a dict of configuration
+    Returns:
+        torch.device
+    """
+    device = None
+    if cfg['device'] == 'cpu':
+        device = torch.device("cpu")
+    elif cfg['device'] == 'gpu':
+        device = torch.device("cuda")
+    else:
+        raise NotImplementedError
 
 
 def build_network(cfg):

@@ -15,7 +15,11 @@ class PixWiseBCELoss(nn.Module):
         self.beta = beta
 
     
-    def forward(self, output, label):
-        loss = 0
+    def forward(self, net_mask, net_label, target_mask, target_label):
+        # https://gitlab.idiap.ch/bob/bob.paper.deep_pix_bis_pad.icb2019/blob/master/bob/paper/deep_pix_bis_pad/icb2019/config/cnn_trainer_config/oulu_deep_pixbis.py
+        loss_pixel_map = self.criterion(target_mask, net_mask)
+        loss_bce = self.criterion(target_label, net_label)
+
+        loss = self.beta * loss_bce + (1 - self.beta) * loss_pixel_map
         return loss
     

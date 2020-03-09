@@ -1,3 +1,6 @@
+output_dir: 'experiments/output'
+log_dir: 'experiments/log'
+device: 'cpu'
 dataset:
   name: 'nuua'
   root: 'data/nuua'

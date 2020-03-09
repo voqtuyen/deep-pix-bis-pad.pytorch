@@ -1,10 +1,11 @@
 class BaseTrainer():
-    def __init__(self, cfg, network, optimizer, loss, lr_scheduler, trainloader, testloader):
+    def __init__(self, cfg, network, optimizer, loss, lr_scheduler, device, trainloader, testloader):
         self.cfg = cfg
         self.network = network
         self.optimizer = optimizer
         self.loss = loss
         self.lr_scheduler = lr_scheduler
+        self.device = device
         self.trainloader = trainloader
         self.testloader = testloader
 

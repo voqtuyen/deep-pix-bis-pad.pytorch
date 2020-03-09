@@ -3,10 +3,12 @@ from torchvision import transforms, datasets
 from trainer.Trainer import Trainer
 from models.loss import PixWiseBCELoss
 from datasets.PixWiseDataset import PixWiseDataset
-from utils.utils import read_cfg, get_optimizer, build_network
+from utils.utils import read_cfg, get_optimizer, build_network, get_device
 
 
 cfg = read_cfg(cfg_file='config/densenet_161_adam_lr1e-3.yaml')
+
+device = get_device(cfg)
 
 network = build_network(cfg)
 
