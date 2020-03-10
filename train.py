@@ -25,17 +25,17 @@ writer.add_graph(network, (dump_input, ))
 
 # Without Resize transform, images are of different sizes and it causes an error
 train_transform = transforms.Compose([
-    transforms.Resize((224,224)),
+    transforms.Resize(cfg['model']['image_size']),
     transforms.RandomRotation(20),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+    transforms.Normalize(cfg['dataset']['mean'], cfg['dataset']['sigma'])
 ])
 
 test_transform = transforms.Compose([
-    transforms.Resize((224,224)),
+    transforms.Resize(cfg['model']['image_size']),
     transforms.ToTensor(),
-    transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+    transforms.Normalize(cfg['dataset']['mean'], cfg['dataset']['sigma'])
 ])
 
 trainset = PixWiseDataset(
