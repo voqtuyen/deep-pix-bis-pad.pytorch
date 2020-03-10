@@ -16,7 +16,7 @@ class Trainer(BaseTrainer):
 
         self.val_loss_metric = AverageMeter(writer=writer, name='Loss/val', length=len(self.testloader))
         self.val_acc_metric = AverageMeter(writer=writer, name='Accuracy/val', length=len(self.testloader))
-        self.best_val_loss = 0
+        self.best_val_acc = 0
 
 
     def load_model(self):
@@ -68,9 +68,9 @@ class Trainer(BaseTrainer):
 
         for epoch in range(self.cfg['train']['num_epochs']):
             self.train_one_epoch(epoch)
-            epoch_loss = self.validate(epoch)
-            if epoch_loss < self.best_val_loss:
-                self.best_val_loss = epoch_loss
+            epoch_acc = self.validate(epoch)
+            if epoch_acc > self.best_val_acc:
+                self.best_val_acc = epoch_acc
                 self.save_model(epoch)
 
 
@@ -98,4 +98,4 @@ class Trainer(BaseTrainer):
             if i == seed:
                 add_images_tb(self.cfg, epoch, img, preds, targets, self.writer)
 
-        return self.val_loss_metric.avg
+        return self.val_acc_metric.avg
