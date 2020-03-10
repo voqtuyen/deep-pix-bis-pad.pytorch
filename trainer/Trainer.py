@@ -1,7 +1,9 @@
 import os
 import torch
+import torchvision
 from trainer.base import BaseTrainer
 from utils.meters import AverageMeter, predict, calc_acc
+from PIL import ImageDraw
 
 
 class Trainer(BaseTrainer):
@@ -84,3 +86,18 @@ class Trainer(BaseTrainer):
             # Update metrics
             self.val_loss_metric.update(loss.item())
             self.val_acc_metric.update(acc)
+            if i == 0:
+                transform_img = torchvision.transforms.Compose(
+                    [
+                        torchvision.transforms.Normalize((-1,-1,-1), (2,2,2)),
+                        torchvision.transforms.ToPILImage()
+                    ]
+                )
+
+                transform_ts = torchvision.transforms.ToTensor()
+                for j in range(img.shape[0]):
+                    vis_img = transform_img(img[j].cpu())
+                    ImageDraw.Draw(vis_img).text((0,0), 'pred: {} vs true: {}'.format(preds[j], targets[j]), (255,255,0))
+                    tb_img = transform_ts(vis_img)
+                    self.writer.add_image('Visualization/{}'.format(j), tb_img, epoch)
+                

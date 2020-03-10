@@ -19,9 +19,9 @@ loss = PixWiseBCELoss(beta=cfg['train']['loss']['beta'])
 
 writer = SummaryWriter(cfg['log_dir'])
 
-# dump_input = torch.randn(1,3,224,224)
+dump_input = torch.randn(1,3,224,224)
 
-# writer.add_graph(network, dump_input)
+writer.add_graph(network, (dump_input, ))
 
 # Without Resize transform, images are of different sizes and it causes an error
 train_transform = transforms.Compose([
@@ -62,7 +62,7 @@ trainloader = torch.utils.data.DataLoader(
 testloader = torch.utils.data.DataLoader(
     dataset=testset,
     batch_size=cfg['test']['batch_size'],
-    shuffle=False,
+    shuffle=True,
     num_workers=0
 )
 
@@ -79,3 +79,4 @@ trainer = Trainer(
 )
 
 trainer.train()
+writer.close()

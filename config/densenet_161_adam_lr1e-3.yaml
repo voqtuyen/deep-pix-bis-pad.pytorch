@@ -2,8 +2,8 @@ output_dir: 'experiments/output'
 log_dir: 'experiments/log'
 device: 'gpu'
 dataset:
-  name: 'nuaa'
-  root: 'data/nuaa'
+  name: 'rose'
+  root: 'data/rose'
   augmentation:
     horizontal_flip: True
     vertial_flip: False
@@ -20,13 +20,13 @@ model:
   smoothing: True
 
 train:
-  batch_size: 16
+  batch_size: 24
   optimizer: 'adam'
   lr: 0.001
-  num_epochs: 100
+  num_epochs: 10
   loss:
     beta: 0.5
 
 test:
-  batch_size: 16
+  batch_size: 24
   score_type: 'pixel' # types = (pixel, binary, combined)
