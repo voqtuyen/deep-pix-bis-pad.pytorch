@@ -10,6 +10,8 @@ dataset:
     random_rotation: 30
   train_set: 'train.csv'
   test_set: 'test.csv'
+  mean: (0.5,0.5,0.5) 
+  sigma: (0.5,0.5,0.5)
 
 model:
   base: 'densenet_161'
