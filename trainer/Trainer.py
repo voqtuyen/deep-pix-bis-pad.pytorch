@@ -75,6 +75,8 @@ class Trainer(BaseTrainer):
         self.val_loss_metric.reset(epoch)
         self.val_acc_metric.reset(epoch)
 
+        seed = randint(0, len(self.testloader)-1)
+
         for i, (img, mask, label) in enumerate(self.testloader):
             img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
             net_mask, net_label = self.network(img)
@@ -88,5 +90,6 @@ class Trainer(BaseTrainer):
             self.val_loss_metric.update(loss.item())
             self.val_acc_metric.update(acc)
 
-            if i == randint(0, len(self.testloader)-1):
+            
+            if i == seed:
                 add_images_tb(self.cfg, epoch, img, preds, targets, self.writer)
