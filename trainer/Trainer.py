@@ -1,7 +1,7 @@
 import os
 import torch
 from trainer.base import BaseTrainer
-from utils.meters import AverageMeter
+from utils.meters import AverageMeter, predict, calc_acc
 
 
 class Trainer(BaseTrainer):
@@ -43,10 +43,13 @@ class Trainer(BaseTrainer):
             loss.backward()
             self.optimizer.step()
 
+            # Calculate predictions
+            preds = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
+            targets = predict(mask, label, score_type=self.cfg['test']['score_type'])
+            acc = calc_acc(preds, targets)
             # Update metrics
-            print(loss)
             loss_metric.update(loss)
-            # acc_metric.update()
+            acc_metric.update(acc)
 
 
     def train(self):
