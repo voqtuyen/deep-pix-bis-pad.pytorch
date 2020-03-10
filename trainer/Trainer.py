@@ -87,6 +87,7 @@ class Trainer(BaseTrainer):
             self.val_loss_metric.update(loss.item())
             self.val_acc_metric.update(acc)
             if i == 0:
+                # https://discuss.pytorch.org/t/simple-way-to-inverse-transform-normalization/4821/6
                 transform_img = torchvision.transforms.Compose(
                     [
                         torchvision.transforms.Normalize((-1,-1,-1), (2,2,2)),
