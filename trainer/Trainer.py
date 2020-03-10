@@ -28,6 +28,9 @@ class Trainer(BaseTrainer):
 
 
     def save_model(self, epoch):
+        if not os.path.exists(self.cfg['output_dir']):
+            os.makedirs(self.cfg['output_dir'])
+
         saved_name = os.path.join(self.cfg['output_dir'], '{}_{}.pth'.format(self.cfg['model']['base'], self.cfg['dataset']['name']))
 
         state = {
