@@ -1,6 +1,7 @@
 import torch
 from torchvision import transforms, datasets
 from trainer.Trainer import Trainer
+from torch.utils.tensorboard import SummaryWriter
 from models.loss import PixWiseBCELoss
 from datasets.PixWiseDataset import PixWiseDataset
 from utils.utils import read_cfg, get_optimizer, build_network, get_device
@@ -15,6 +16,8 @@ network = build_network(cfg)
 optimizer = get_optimizer(cfg, network)
 
 loss = PixWiseBCELoss(beta=cfg['train']['loss']['beta'])
+
+writer = SummaryWriter(cfg['log_dir'])
 
 # Without Resize transform, images are of different sizes and it causes an error
 train_transform = transforms.Compose([
@@ -67,7 +70,8 @@ trainer = Trainer(
     lr_scheduler=None,
     device=device,
     trainloader=trainloader,
-    testloader=testloader
+    testloader=testloader,
+    writer=writer
 )
 
 trainer.train()

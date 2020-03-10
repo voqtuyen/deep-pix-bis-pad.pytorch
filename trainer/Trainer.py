@@ -5,9 +5,11 @@ from utils.meters import AverageMeter, predict, calc_acc
 
 
 class Trainer(BaseTrainer):
-    def __init__(self, cfg, network, optimizer, loss, lr_scheduler, device, trainloader, testloader):
-        super(Trainer, self).__init__(cfg, network, optimizer, loss, lr_scheduler, device, trainloader, testloader)
+    def __init__(self, cfg, network, optimizer, loss, lr_scheduler, device, trainloader, testloader, writer):
+        super(Trainer, self).__init__(cfg, network, optimizer, loss, lr_scheduler, device, trainloader, testloader, writer)
         self.network = self.network.to(device)
+        self.train_loss_metric = AverageMeter(writer=writer, name='Loss/train', length=len(self.trainloader))
+        self.train_acc_metric = AverageMeter(writer=writer, name='Accuracy/train', length=len(self.trainloader))
 
 
     def load_model(self):
@@ -32,8 +34,9 @@ class Trainer(BaseTrainer):
 
     def train_one_epoch(self, epoch):
 
-        loss_metric = AverageMeter()
-        acc_metric = AverageMeter()
+        self.network.train()
+        self.train_loss_metric.reset(epoch)
+        self.train_acc_metric.reset(epoch)
 
         for i, (img, mask, label) in enumerate(self.trainloader):
             img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
@@ -48,12 +51,14 @@ class Trainer(BaseTrainer):
             targets = predict(mask, label, score_type=self.cfg['test']['score_type'])
             acc = calc_acc(preds, targets)
             # Update metrics
-            loss_metric.update(loss)
-            acc_metric.update(acc)
+            self.train_loss_metric.update(loss)
+            self.train_acc_metric.update(acc)
+
+            print('Epoch: {}, iter: {}, loss: {}, acc: {}'.format(epoch, epoch * len(self.trainloader) + i, self.train_loss_metric.avg, self.train_acc_metric.avg))
 
 
     def train(self):
-        self.network.train()
+        
 
         for epoch in range(self.cfg['train']['num_epochs']):
             self.train_one_epoch(epoch)

@@ -1,6 +1,6 @@
 output_dir: 'experiments/output'
 log_dir: 'experiments/log'
-device: 'cpu'
+device: 'gpu'
 dataset:
   name: 'nuaa'
   root: 'data/nuaa'
@@ -20,7 +20,7 @@ model:
   smoothing: True
 
 train:
-  batch_size: 2
+  batch_size: 16
   optimizer: 'adam'
   lr: 0.001
   num_epochs: 100
@@ -28,5 +28,5 @@ train:
     beta: 0.5
 
 test:
-  batch_size: 2
+  batch_size: 16
   score_type: 'pixel' # types = (pixel, binary, combined)
