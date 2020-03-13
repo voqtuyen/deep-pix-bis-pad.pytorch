@@ -7,7 +7,7 @@ dataset:
   augmentation:
     horizontal_flip: True
     vertial_flip: False
-    random_rotation: 30
+    rotation: 10
   train_set: 'train.csv'
   test_set: 'test.csv'
   mean: [0.5,0.5,0.5]
@@ -15,7 +15,7 @@ dataset:
 
 model:
   base: 'densenet_161'
-  pretrained: True
+  pretrained: False
   num_output: 2
   image_size: [224,224]
   map_size: 14

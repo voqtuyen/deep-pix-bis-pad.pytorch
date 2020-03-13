@@ -57,8 +57,8 @@ class Trainer(BaseTrainer):
             self.optimizer.step()
 
             # Calculate predictions
-            preds = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
-            targets = predict(mask, label, score_type=self.cfg['test']['score_type'])
+            preds, _ = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
+            targets, _ = predict(mask, label, score_type=self.cfg['test']['score_type'])
             acc = calc_acc(preds, targets)
             # Update metrics
             self.train_loss_metric.update(loss.item())
@@ -72,9 +72,9 @@ class Trainer(BaseTrainer):
         for epoch in range(self.cfg['train']['num_epochs']):
             self.train_one_epoch(epoch)
             epoch_acc = self.validate(epoch)
-            if epoch_acc > self.best_val_acc:
-                self.best_val_acc = epoch_acc
-                self.save_model(epoch)
+            # if epoch_acc > self.best_val_acc:
+            #     self.best_val_acc = epoch_acc
+            self.save_model(epoch)
 
 
     def validate(self, epoch):
@@ -90,8 +90,8 @@ class Trainer(BaseTrainer):
             loss = self.loss(net_mask, net_label, mask, label)
 
             # Calculate predictions
-            preds = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
-            targets = predict(mask, label, score_type=self.cfg['test']['score_type'])
+            preds, score = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
+            targets, _ = predict(mask, label, score_type=self.cfg['test']['score_type'])
             acc = calc_acc(preds, targets)
             # Update metrics
             self.val_loss_metric.update(loss.item())
@@ -99,6 +99,6 @@ class Trainer(BaseTrainer):
 
             
             if i == seed:
-                add_images_tb(self.cfg, epoch, img, preds, targets, self.writer)
+                add_images_tb(self.cfg, epoch, img, preds, targets, score, self.writer)
 
         return self.val_acc_metric.avg
