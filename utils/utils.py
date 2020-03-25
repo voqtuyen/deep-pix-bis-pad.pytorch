@@ -45,7 +45,7 @@ def get_device(cfg):
     if cfg['device'] == 'cpu':
         device = torch.device("cpu")
     elif cfg['device'] == 'gpu':
-        device = torch.device("cuda:0")
+        device = torch.device("cuda:1")
     else:
         raise NotImplementedError
     return device

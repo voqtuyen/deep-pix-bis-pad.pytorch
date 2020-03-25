@@ -1,3 +1,4 @@
+import os
 import torch
 from torchvision import transforms, datasets
 from trainer.Trainer import Trainer
@@ -6,6 +7,8 @@ from models.loss import PixWiseBCELoss
 from datasets.PixWiseDataset import PixWiseDataset
 from utils.utils import read_cfg, get_optimizer, build_network, get_device
 
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 cfg = read_cfg(cfg_file='config/densenet_161_adam_lr1e-3.yaml')
 
@@ -26,7 +29,7 @@ writer.add_graph(network, (dump_input, ))
 # Without Resize transform, images are of different sizes and it causes an error
 train_transform = transforms.Compose([
     transforms.Resize(cfg['model']['image_size']),
-    transforms.RandomRotation(20),
+    transforms.RandomRotation(cfg['dataset']['augmentation']['rotation']),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize(cfg['dataset']['mean'], cfg['dataset']['sigma'])
