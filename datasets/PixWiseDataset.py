@@ -55,7 +55,7 @@ class PixWiseDataset(Dataset):
         if self.transform:
             img = self.transform(img)
 
-        return img, mask, label
+        return img, mask
 
 
     def __len__(self):

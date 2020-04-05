@@ -49,16 +49,16 @@ class Trainer(BaseTrainer):
         self.train_acc_metric.reset(epoch)
 
         for i, (img, mask, label) in enumerate(self.trainloader):
-            img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
-            net_mask, net_label = self.network(img)
+            img, mask = img.to(self.device), mask.to(self.device)
+            net_mask = self.network(img)
             self.optimizer.zero_grad()
-            loss = self.loss(net_mask, net_label, mask, label)
+            loss = self.loss(net_mask, mask)
             loss.backward()
             self.optimizer.step()
 
             # Calculate predictions
-            preds, _ = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
-            targets, _ = predict(mask, label, score_type=self.cfg['test']['score_type'])
+            preds, _ = predict(net_mask, score_type=self.cfg['test']['score_type'])
+            targets, _ = predict(mask, score_type=self.cfg['test']['score_type'])
             acc = calc_acc(preds, targets)
             # Update metrics
             self.train_loss_metric.update(loss.item())
@@ -84,14 +84,14 @@ class Trainer(BaseTrainer):
 
         seed = randint(0, len(self.testloader)-1)
 
-        for i, (img, mask, label) in enumerate(self.testloader):
-            img, mask, label = img.to(self.device), mask.to(self.device), label.to(self.device)
-            net_mask, net_label = self.network(img)
-            loss = self.loss(net_mask, net_label, mask, label)
+        for i, (img, mask) in enumerate(self.testloader):
+            img, mask = img.to(self.device), mask.to(self.device)
+            net_mask = self.network(img)
+            loss = self.loss(net_mask, mask)
 
             # Calculate predictions
-            preds, score = predict(net_mask, net_label, score_type=self.cfg['test']['score_type'])
-            targets, _ = predict(mask, label, score_type=self.cfg['test']['score_type'])
+            preds, score = predict(net_mask, score_type=self.cfg['test']['score_type'])
+            targets, _ = predict(mask, score_type=self.cfg['test']['score_type'])
             acc = calc_acc(preds, targets)
             # Update metrics
             self.val_loss_metric.update(loss.item())

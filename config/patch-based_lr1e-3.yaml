@@ -1,0 +1,34 @@
+output_dir: 'experiments/output'
+log_dir: 'experiments/log'
+device: 'gpu'
+dataset:
+  name: 'rose'
+  root: 'data/rose'
+  augmentation:
+    horizontal_flip: True
+    vertial_flip: False
+    rotation: 10
+  train_set: 'train.csv'
+  test_set: 'test.csv'
+  mean: [0.5,0.5,0.5]
+  sigma: [0.5,0.5,0.5]
+
+model:
+  base: 'liveness'
+  pretrained: False
+  num_output: 2
+  image_size: [256,256]
+  map_size: 32
+  smoothing: True
+
+train:
+  batch_size: 24
+  optimizer: 'adam'
+  lr: 0.001
+  num_epochs: 10
+  loss:
+    beta: 0.5
+
+test:
+  batch_size: 24
+  score_type: 'pixel' # types = (pixel, binary, combined)
