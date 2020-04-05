@@ -5,36 +5,81 @@ from torch import nn
 class LivenessNet(nn.Module):
     def __init__(self):
         super(LivenessNet, self).__init__()
-        self.conv0 = nn.Conv2d(6, 32, 3, 1, padding=1)
-        self.max_pool0 = nn.MaxPool2d(3, 2, padding=1)
-        self.conv1 = nn.Conv2d(32, 32, 3, 1, padding=1)
-        self.conv2 = nn.Conv2d(32, 25, 3, 1, padding=1)
-        self.max_pool1 = nn.MaxPool2d(3, 2, padding=1)
-        self.conv4 = nn.Conv2d(32, 32, 3, 1, padding=1)
-        self.conv5 = nn.Conv2d(32, 25, 3, 1, padding=1)
-        self.conv6 = nn.Conv2d(25, 32, 3, 1, padding=1)
-        self.max_pool2 = nn.MaxPool2d(3, 2, padding=1)
-        self.conv7 = nn.Conv2d(32, 32, 3, 1, padding=1)
-        self.conv8 = nn.Conv2d(32, 25, 3, 1, padding=1)
-        self.conv9 = nn.Conv2d(25, 32, 3, 1, padding=1)
-        self.conv10 = nn.Conv2d(32, 32, 3, 1, padding=1)
-        self.conv11 = nn.Conv2d(32, 25, 3, 1, padding=1)
-        self.conv12 = nn.Conv2d(25, 2, 3, 1, padding=1)
-        self.bn0 = nn.BatchNorm2d(32)
-        self.bn1 = nn.BatchNorm2d(32)
-        self.bn2 = nn.BatchNorm2d(25)
-        self.bn3 = nn.BatchNorm2d(32)
-        self.bn4 = nn.BatchNorm2d(32)
-        self.bn5 = nn.BatchNorm2d(25)
-        self.bn6 = nn.BatchNorm2d(32)
-        self.bn7 = nn.BatchNorm2d(32)
-        self.bn8 = nn.BatchNorm2d(25)
-        self.bn9 = nn.BatchNorm2d(32)
-        self.bn10 = nn.BatchNorm2d(32)
-        self.bn11 = nn.BatchNorm2d(32)
-        self.bn12 = nn.BatchNorm2d(2)
 
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(6, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(3, 3), stride=2, padding=1)
+        )
+
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 25, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(25),
+            nn.ReLU(),
+            nn.Conv2d(25, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(3, 3), stride=2, padding=1)
+        )
+
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 25, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(25),
+            nn.ReLU(),
+            nn.Conv2d(25, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(3, 3), stride=2, padding=1)
+        )
+
+        self.layer4 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 25, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(25),
+            nn.ReLU(),
+            nn.Conv2d(25, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU()
+        )
+
+        self.layer5 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 25, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(25),
+            nn.ReLU(),
+        )
+
+        self.layer6 = nn.Conv2d(25, 1, kernel_size=3, stride=1, padding=1)
+
+        self.shortcut = nn.MaxPool2d(kernel_size=(3, 3), stride=2, padding=1)
 
     def forward(self, x):
-        x = self.conv0(x)
-        return  x
+        output_layer_1 = self.layer1(x)
+        output_layer_2 = self.layer2(output_layer_1)
+        output_layer_3 = self.layer3(output_layer_2)
+        output_layer_4 = self.layer4(output_layer_3)
+        shortcut_1 = self.shortcut(output_layer_2)
+        output_immediate = shortcut_1 + output_layer_3 + output_layer_4
+        output_layer_5 = self.layer5(output_immediate)
+        output_layer_6 = self.layer6(output_layer_5)
+
+        return output_layer_6
+
+
+net = LivenessNet()
+
+dump_input = torch.rand((1, 6, 256, 256))
+dump_output = net.forward(dump_input)
+
+print(dump_output.shape)
