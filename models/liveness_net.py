@@ -76,10 +76,3 @@ class LivenessNet(nn.Module):
 
         return output_layer_6
 
-
-net = LivenessNet()
-
-dump_input = torch.rand((1, 6, 256, 256))
-dump_output = net.forward(dump_input)
-
-print(dump_output.shape)
