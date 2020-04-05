@@ -2,6 +2,7 @@ import yaml
 import torch
 from torch import optim
 from models.densenet_161 import DeepPixBis
+from models.liveness_net import LivenessNet
 
 
 def read_cfg(cfg_file):
@@ -45,7 +46,7 @@ def get_device(cfg):
     if cfg['device'] == 'cpu':
         device = torch.device("cpu")
     elif cfg['device'] == 'gpu':
-        device = torch.device("cuda:1")
+        device = torch.device("cuda:0")
     else:
         raise NotImplementedError
     return device
@@ -62,6 +63,8 @@ def build_network(cfg):
 
     if cfg['model']['base'] == 'densenet_161':
         network = DeepPixBis(pretrained=cfg['model']['pretrained'])
+    elif cfg['model']['base'] == 'liveness':
+        network = LivenessNet()
     else:
         raise NotImplementedError
 

@@ -8,9 +8,9 @@ from datasets.PixWiseDataset import PixWiseDataset
 from utils.utils import read_cfg, get_optimizer, build_network, get_device
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-cfg = read_cfg(cfg_file='config/densenet_161_adam_lr1e-3.yaml')
+cfg = read_cfg(cfg_file='config/patch-based_lr1e-3.yaml')
 
 device = get_device(cfg)
 
@@ -22,7 +22,7 @@ loss = PixWiseBCELoss(beta=cfg['train']['loss']['beta'])
 
 writer = SummaryWriter(cfg['log_dir'])
 
-dump_input = torch.randn(1,3,224,224)
+dump_input = torch.randn(1,3,256,256)
 
 writer.add_graph(network, (dump_input, ))
 

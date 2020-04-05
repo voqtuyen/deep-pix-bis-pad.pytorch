@@ -48,7 +48,7 @@ class Trainer(BaseTrainer):
         self.train_loss_metric.reset(epoch)
         self.train_acc_metric.reset(epoch)
 
-        for i, (img, mask, label) in enumerate(self.trainloader):
+        for i, (img, mask) in enumerate(self.trainloader):
             img, mask = img.to(self.device), mask.to(self.device)
             net_mask = self.network(img)
             self.optimizer.zero_grad()
