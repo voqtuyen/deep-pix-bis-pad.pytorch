@@ -14,7 +14,7 @@ dataset:
   sigma: [0.5,0.5,0.5]
 
 model:
-  base: 'liveness'
+  base: 'liveness_v2'
   pretrained: False
   num_output: 2
   image_size: [320,320]

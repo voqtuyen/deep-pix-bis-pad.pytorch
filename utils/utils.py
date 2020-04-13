@@ -3,6 +3,7 @@ import torch
 from torch import optim
 from models.densenet_161 import DeepPixBis
 from models.liveness_net import LivenessNet
+from models.FeatherNet import LivenessNet_v2
 
 
 def read_cfg(cfg_file):
@@ -65,6 +66,8 @@ def build_network(cfg):
         network = DeepPixBis(pretrained=cfg['model']['pretrained'])
     elif cfg['model']['base'] == 'liveness':
         network = LivenessNet()
+    elif cfg['model']['base'] == 'liveness_v2':
+        network = LivenessNet_v2()
     else:
         raise NotImplementedError
 
