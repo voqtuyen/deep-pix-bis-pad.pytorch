@@ -48,9 +48,9 @@ class Trainer(BaseTrainer):
         self.train_loss_metric.reset(epoch)
         self.train_acc_metric.reset(epoch)
 
-        for i, (img_hsv, mask) in enumerate(self.trainloader):
-            img_hsv, mask = img_hsv.to(self.device), mask.to(self.device)
-            net_mask = self.network(img_hsv)
+        for i, (img_hsv, img_yuv, mask) in enumerate(self.trainloader):
+            img_hsv, img_yuv, mask = img_hsv.to(self.device), img_yuv.to(self.device), mask.to(self.device)
+            net_mask = self.network(img_hsv, img_yuv)
             
             self.optimizer.zero_grad()
             loss = self.loss(net_mask, mask)
@@ -85,9 +85,9 @@ class Trainer(BaseTrainer):
 
         seed = randint(0, len(self.testloader)-1)
 
-        for i, (img_hsv, mask) in enumerate(self.testloader):
-            img_hsv, mask = img_hsv.to(self.device), mask.to(self.device)
-            net_mask = self.network(img_hsv)
+        for i, (img_hsv, img_yuv, mask) in enumerate(self.testloader):
+            img_hsv, img_yuv, mask = img_hsv.to(self.device), img_yuv.to(self.device), mask.to(self.device)
+            net_mask = self.network(img_hsv, img_yuv)
             loss = self.loss(net_mask, mask)
 
             # Calculate predictions

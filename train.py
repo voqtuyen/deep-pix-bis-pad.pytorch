@@ -10,9 +10,9 @@ from utils.transforms import RandomGammaCorrection, RandomBrightness
 
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
-cfg = read_cfg(cfg_file='config/patch-based_lr1e-3.yaml')
+cfg = read_cfg(cfg_file='config/patch-based_v2_lr1e-3.yaml')
 
 device = get_device(cfg)
 

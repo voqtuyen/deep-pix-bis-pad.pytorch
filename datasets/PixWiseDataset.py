@@ -45,7 +45,6 @@ class PixWiseDataset(Dataset):
         img_name = os.path.join(self.root_dir, img_name)
         img = Image.open(img_name)
 
-        img_hsv = img.convert(mode='HSV')
         label = self.data.iloc[index, 1].astype(np.float32)
         label = np.expand_dims(label, axis=0)
 
@@ -55,9 +54,12 @@ class PixWiseDataset(Dataset):
             mask = np.ones((1, self.map_size[0], self.map_size[1]), dtype=np.float32) * (1.0 - self.label_weight)
 
         if self.transform:
-            img_hsv = self.transform(img_hsv)
+            img = self.transform(img)
 
-        return img_hsv, mask
+        img_hsv = img.convert(mode='HSV')
+        img_yuv = img.convert(mode='YCbCr')
+
+        return img_hsv, img_yuv, mask
 
 
     def __len__(self):
