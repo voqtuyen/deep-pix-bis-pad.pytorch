@@ -161,13 +161,13 @@ def FeatherNetB():
 
 class LivenessNet_v2(nn.Module):
     def __init__(self):
-        super().__init__(self)
+        super(LivenessNet_v2, self).__init__()
 
         self.hsv_branch = FeatherNetB()
         self.yuv_branch = FeatherNetB()
 
         self.binary_map = nn.Sequential(
-            nn.Conv2d(64, 32, kernel_size=3, stride=1, padding=1)
+            nn.Conv2d(64, 32, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(32),
             nn.ReLU6(),
             nn.Conv2d(32, 16, kernel_size=3, stride=1, padding=1),
