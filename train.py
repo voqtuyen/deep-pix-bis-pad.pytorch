@@ -35,15 +35,11 @@ train_transform = transforms.Compose([
     transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
     transforms.Resize(cfg['model']['image_size']),
     transforms.RandomRotation(cfg['dataset']['augmentation']['rotation']),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize(cfg['dataset']['mean'], cfg['dataset']['sigma'])
+    transforms.RandomHorizontalFlip()
 ])
 
 test_transform = transforms.Compose([
-    transforms.Resize(cfg['model']['image_size']),
-    transforms.ToTensor(),
-    transforms.Normalize(cfg['dataset']['mean'], cfg['dataset']['sigma'])
+    transforms.Resize(cfg['model']['image_size'])
 ])
 
 trainset = PixWiseDataset(

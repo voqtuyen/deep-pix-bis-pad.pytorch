@@ -18,7 +18,7 @@ model:
   pretrained: False
   num_output: 2
   image_size: [320,320]
-  map_size: 10
+  map_size: [10,10]
   smoothing: True
 
 train:

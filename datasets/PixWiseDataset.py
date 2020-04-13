@@ -25,6 +25,13 @@ class PixWiseDataset(Dataset):
         self.data = pd.read_csv(os.path.join(root_dir, csv_file))
         self.map_size = map_size
         self.transform = transform
+
+        self.dataset_transform = transforms.Compose(
+            [
+                transforms.ToTensor(),
+                transforms.Normalize(cfg['dataset']['mean'], cfg['dataset']['sigma'])
+            ]
+        )
         
         if smoothing:
             self.label_weight = 0.99
@@ -58,6 +65,9 @@ class PixWiseDataset(Dataset):
 
         img_hsv = img.convert(mode='HSV')
         img_yuv = img.convert(mode='YCbCr')
+
+        img_hsv = self.dataset_transform(img_hsv)
+        img_yuv = self.dataset_transform(img_yuv)
 
         return img_hsv, img_yuv, mask
 
