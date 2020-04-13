@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 from torchvision import transforms
+import math
 
 
 class PixWiseDataset(Dataset):
@@ -44,18 +45,19 @@ class PixWiseDataset(Dataset):
         img_name = os.path.join(self.root_dir, img_name)
         img = Image.open(img_name)
 
+        img_hsv = img.convert(mode='HSV')
         label = self.data.iloc[index, 1].astype(np.float32)
         label = np.expand_dims(label, axis=0)
 
         if label == 1:
-            mask = np.ones((1, self.map_size, self.map_size), dtype=np.float32) * self.label_weight
+            mask = np.ones((1, self.map_size[0], self.map_size[1]), dtype=np.float32) * self.label_weight
         else:
-            mask = np.ones((1, self.map_size, self.map_size), dtype=np.float32) * (1.0 - self.label_weight)
+            mask = np.ones((1, self.map_size[0], self.map_size[1]), dtype=np.float32) * (1.0 - self.label_weight)
 
         if self.transform:
-            img = self.transform(img)
+            img_hsv = self.transform(img_hsv)
 
-        return img, mask
+        return img_hsv, mask
 
 
     def __len__(self):

@@ -75,4 +75,3 @@ class LivenessNet(nn.Module):
         output_layer_6 = self.layer6(output_layer_5)
 
         return output_layer_6
-
