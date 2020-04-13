@@ -171,7 +171,7 @@ class LivenessNet_v2(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU6(),
             nn.Conv2d(32, 16, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(1),
+            nn.BatchNorm2d(16),
             nn.ReLU6(),
             nn.Conv2d(16, 1, kernel_size=3, stride=1, padding=1)
         )
