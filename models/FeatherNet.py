@@ -182,19 +182,5 @@ class LivenessNet_v2(nn.Module):
         yuv_feature = self.yuv_branch(yuv_input)
 
         feature = hsv_feature + yuv_feature # [batch, 64, 10, 10]
-
         feature = self.binary_map(feature)
-
         return feature
-
-
-
-
-
-dump_input = torch.randn(1,3,320,320)
-
-net = FeatherNetB()
-
-output = net(dump_input)
-
-print(output.shape)
