@@ -26,7 +26,7 @@ writer = SummaryWriter(cfg['log_dir'])
 
 dump_input = torch.randn(1,3,320,320)
 
-writer.add_graph(network, (dump_input, ))
+# writer.add_graph(network, dump_input, dump_input)
 
 # Without Resize transform, images are of different sizes and it causes an error
 train_transform = transforms.Compose([
