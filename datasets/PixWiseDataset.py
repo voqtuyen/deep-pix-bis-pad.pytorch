@@ -19,7 +19,7 @@ class PixWiseDataset(Dataset):
         smoothing (bool): Use label smoothing
     """
 
-    def __init__(self, root_dir, csv_file, map_size, transform=None, smoothing=True):
+    def __init__(self, cfg, root_dir, csv_file, map_size, transform=None, smoothing=True):
         super().__init__()
         self.root_dir = root_dir
         self.data = pd.read_csv(os.path.join(root_dir, csv_file))
