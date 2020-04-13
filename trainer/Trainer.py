@@ -31,7 +31,7 @@ class Trainer(BaseTrainer):
         if not os.path.exists(self.cfg['output_dir']):
             os.makedirs(self.cfg['output_dir'])
 
-        saved_name = os.path.join(self.cfg['output_dir'], '{}_{}.pth'.format(self.cfg['model']['base'], self.cfg['dataset']['name']))
+        saved_name = os.path.join(self.cfg['output_dir'], '{}_{}_{}.pth'.format(epoch, self.cfg['model']['base'], self.cfg['dataset']['name']))
 
         state = {
             'epoch': epoch,
@@ -48,9 +48,10 @@ class Trainer(BaseTrainer):
         self.train_loss_metric.reset(epoch)
         self.train_acc_metric.reset(epoch)
 
-        for i, (img, mask) in enumerate(self.trainloader):
-            img, mask = img.to(self.device), mask.to(self.device)
-            net_mask = self.network(img)
+        for i, (img_hsv, mask) in enumerate(self.trainloader):
+            img_hsv, mask = img_hsv.to(self.device), mask.to(self.device)
+            net_mask = self.network(img_hsv)
+            
             self.optimizer.zero_grad()
             loss = self.loss(net_mask, mask)
             loss.backward()
@@ -84,9 +85,9 @@ class Trainer(BaseTrainer):
 
         seed = randint(0, len(self.testloader)-1)
 
-        for i, (img, mask) in enumerate(self.testloader):
-            img, mask = img.to(self.device), mask.to(self.device)
-            net_mask = self.network(img)
+        for i, (img_hsv, mask) in enumerate(self.testloader):
+            img_hsv, mask = img_hsv.to(self.device), mask.to(self.device)
+            net_mask = self.network(img_hsv)
             loss = self.loss(net_mask, mask)
 
             # Calculate predictions
@@ -99,6 +100,6 @@ class Trainer(BaseTrainer):
 
             
             if i == seed:
-                add_images_tb(self.cfg, epoch, img, preds, targets, score, self.writer)
+                add_images_tb(self.cfg, epoch, img_hsv, preds, targets, score, self.writer)
 
         return self.val_acc_metric.avg
