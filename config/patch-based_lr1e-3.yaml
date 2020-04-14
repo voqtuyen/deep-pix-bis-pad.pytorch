@@ -2,8 +2,8 @@ output_dir: 'experiments/output'
 log_dir: 'experiments/log'
 device: 'gpu'
 dataset:
-  name: 'rose'
-  root: 'data/rose'
+  name: 'siw+youtu'
+  root: 'data/siw+youtu'
   augmentation:
     horizontal_flip: True
     vertial_flip: False
@@ -17,8 +17,8 @@ model:
   base: 'liveness'
   pretrained: False
   num_output: 2
-  image_size: [256,256]
-  map_size: 32
+  image_size: [320,320]
+  map_size: 40
   smoothing: True
 
 train:
