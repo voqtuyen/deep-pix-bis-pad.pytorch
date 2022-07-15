@@ -1,24 +1,10 @@
 # Deep Pixel-wise Binary Supervision for Face PAD in Pytorch
 
-# Installation
-
-```bash
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-```
-
-# Data preparation
-
-
-
-# Training
-
+# Data
+You can use NUAA, Celeba. In my branch I use Celeba
 
 # Testing
-
-
+Run notebook/CELEBA-CELEBA in jupyter notebook for your database. You wil get metrics, ROC curve, confusion matrix.
 
 # Reference
 [1] Deep Pixel-wise Binary Supervision for Face Presentation Attack Detection  
